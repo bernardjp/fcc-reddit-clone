@@ -1,26 +1,25 @@
 import React from 'react';
-import { Button, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, useDisclosure } from '@chakra-ui/react';
+import { authModalState } from '@/atoms/authModalAtom';
+import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay } from '@chakra-ui/react';
+import { useRecoilState } from 'recoil';
 
 const AuthModal:React.FC = () => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [modalState, setModalState] = useRecoilState(authModalState);
+
+  const handleCloseModal = () => {
+    setModalState(prev => ({
+      ...prev, open: false
+    }));
+  };
 
   return (
     <>
-      {/*To be replaced with AuthButtons*/}
-      {/* <Button onClick={onOpen}>Open Modal</Button> */}
-
-      <Modal isOpen={isOpen} onClose={onClose}>
+      <Modal isOpen={modalState.open} onClose={handleCloseModal}>
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Modal Title</ModalHeader>
           <ModalCloseButton />
-          <ModalBody>Here is the modal Body</ModalBody>
-          <ModalFooter>
-            <Button colorScheme='blue' mr={3} onClick={onClose}>
-              Close
-            </Button>
-            <Button variant='ghost'>Secondary Action</Button>
-          </ModalFooter>
+          <ModalBody>{modalState.view}</ModalBody>
         </ModalContent>
       </Modal>
     </>
