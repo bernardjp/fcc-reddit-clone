@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { useSetRecoilState } from 'recoil';
 import { useCreateUserWithEmailAndPassword } from 'react-firebase-hooks/auth';
 import { auth } from '@/firebase/clientApp';
+import { FIREBASE_ERRORS } from '@/firebase/errors';
 
 const SignUp: React.FC = () => {
   const setAuthModalState = useSetRecoilState(authModalState);
@@ -13,7 +14,6 @@ const SignUp: React.FC = () => {
     confirmPassword: '',
   });
   const [error, setError] = useState<String>('');
-
   const [createUserWithEmailAndPassword, user, loading, userError] =
     useCreateUserWithEmailAndPassword(auth);
 
@@ -104,11 +104,10 @@ const SignUp: React.FC = () => {
           borderColor: 'blue.500',
         }}
       />
-      {error && (
-        <Text textAlign="center" color="red" fontSize="10pt">
-          {error}
-        </Text>
-      )}
+      <Text textAlign="center" color="red" fontSize="10pt">
+        {error ||
+          FIREBASE_ERRORS[userError?.message as keyof typeof FIREBASE_ERRORS]}
+      </Text>
       <Button
         width="100%"
         height="36px"
