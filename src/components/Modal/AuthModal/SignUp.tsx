@@ -5,6 +5,7 @@ import { useSetRecoilState } from 'recoil';
 import { useCreateUserWithEmailAndPassword } from 'react-firebase-hooks/auth';
 import { auth } from '@/firebase/clientApp';
 import { FIREBASE_ERRORS } from '@/firebase/errors';
+import ModalInput from './ModalInput';
 
 const SignUp: React.FC = () => {
   const setAuthModalState = useSetRecoilState(authModalState);
@@ -38,71 +39,23 @@ const SignUp: React.FC = () => {
 
   return (
     <form onSubmit={onSubmit}>
-      <Input
-        required
-        name="email"
+      <ModalInput
+        inputName="email"
         placeholder="email"
         type="email"
         onChange={onChange}
-        bg="gray.50"
-        fontSize="10pt"
-        mb={2}
-        _placeholder={{ color: 'gra.500' }}
-        _hover={{
-          bg: 'white',
-          border: '01px solid',
-          borderColor: 'blue.500',
-        }}
-        _focus={{
-          outline: 'none',
-          bg: 'white',
-          border: '01px solid',
-          borderColor: 'blue.500',
-        }}
       />
-      <Input
-        required
-        name="password"
+      <ModalInput
+        inputName="password"
         placeholder="password"
         type="password"
         onChange={onChange}
-        bg="gray.50"
-        fontSize="10pt"
-        mb={2}
-        _placeholder={{ color: 'gra.500' }}
-        _hover={{
-          bg: 'white',
-          border: '01px solid',
-          borderColor: 'blue.500',
-        }}
-        _focus={{
-          outline: 'none',
-          bg: 'white',
-          border: '01px solid',
-          borderColor: 'blue.500',
-        }}
       />
-      <Input
-        required
-        name="confirmPassword"
+      <ModalInput
+        inputName="confirmPassword"
         placeholder="confirm password"
         type="password"
         onChange={onChange}
-        bg="gray.50"
-        fontSize="10pt"
-        mb={2}
-        _placeholder={{ color: 'gra.500' }}
-        _hover={{
-          bg: 'white',
-          border: '01px solid',
-          borderColor: 'blue.500',
-        }}
-        _focus={{
-          outline: 'none',
-          bg: 'white',
-          border: '01px solid',
-          borderColor: 'blue.500',
-        }}
       />
       <Text textAlign="center" color="red" fontSize="10pt">
         {error ||

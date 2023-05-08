@@ -5,6 +5,7 @@ import { authModalState } from '@/atoms/authModalAtom';
 import { useSignInWithEmailAndPassword } from 'react-firebase-hooks/auth';
 import { auth } from '@/firebase/clientApp';
 import { FIREBASE_ERRORS } from '@/firebase/errors';
+import ModalInput from './ModalInput';
 
 type LoginProps = {};
 
@@ -31,49 +32,17 @@ const Login: React.FC<LoginProps> = () => {
 
   return (
     <form onSubmit={onSubmit}>
-      <Input
-        required
-        name="email"
-        placeholder="email"
+      <ModalInput
         type="email"
+        inputName="email"
+        placeholder="email"
         onChange={onChange}
-        bg="gray.50"
-        fontSize="10pt"
-        mb={2}
-        _placeholder={{ color: 'gra.500' }}
-        _hover={{
-          bg: 'white',
-          border: '01px solid',
-          borderColor: 'blue.500',
-        }}
-        _focus={{
-          outline: 'none',
-          bg: 'white',
-          border: '01px solid',
-          borderColor: 'blue.500',
-        }}
       />
-      <Input
-        required
-        name="password"
-        placeholder="password"
+      <ModalInput
         type="password"
+        inputName="password"
+        placeholder="password"
         onChange={onChange}
-        bg="gray.50"
-        fontSize="10pt"
-        mb={2}
-        _placeholder={{ color: 'gra.500' }}
-        _hover={{
-          bg: 'white',
-          border: '01px solid',
-          borderColor: 'blue.500',
-        }}
-        _focus={{
-          outline: 'none',
-          bg: 'white',
-          border: '01px solid',
-          borderColor: 'blue.500',
-        }}
       />
       <Text textAlign="center" color="red" fontSize="10pt">
         {FIREBASE_ERRORS[userError?.message as keyof typeof FIREBASE_ERRORS]}
