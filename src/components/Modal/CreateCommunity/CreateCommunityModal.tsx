@@ -19,6 +19,9 @@ import {
 } from '@chakra-ui/react';
 import { BsFillEyeFill, BsFillPersonFill } from 'react-icons/bs';
 import { HiLockClosed } from 'react-icons/hi';
+import { doc, getDoc, serverTimestamp, setDoc } from 'firebase/firestore';
+import { auth, firestore } from '@/firebase/clientApp';
+import { useAuthState } from 'react-firebase-hooks/auth';
 
 type CreateCommunityModalProps = {
   open: boolean;
@@ -29,9 +32,12 @@ const CreateCommunityModal: React.FC<CreateCommunityModalProps> = ({
   open,
   handleClose,
 }) => {
+  const [user] = useAuthState(auth);
   const [communityName, setCommunnityName] = useState('');
   const [charsRemaining, setCharsRemaining] = useState(21);
   const [communityType, setCommunityType] = useState('public');
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.value.length > 21) return;
@@ -42,6 +48,46 @@ const CreateCommunityModal: React.FC<CreateCommunityModalProps> = ({
 
   const onComunityTypeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCommunityType(e.target.name);
+  };
+
+  const handleCreateCommunity = async () => {
+    if (error) setError('');
+
+    // validate data: community name
+    const format = /[ `!@#$%^&*()+\-=\[\]{};':"\\|,.<>\/?~]/;
+    if (format.test(communityName) || communityName.length < 3) {
+      setError(
+        'Community names must be between 3-21 characters, and can only contain letters, numbers, or underscores.'
+      );
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      // create the community document in firestore:
+      // 1- Check if the community already exist in the DB.
+      const communityDocRef = doc(firestore, 'communities', communityName);
+      const communityDoc = await getDoc(communityDocRef);
+
+      // 1b- Push the error. End the procedure.
+      if (communityDoc.exists()) {
+        throw new Error(`Sorry, r/${communityName} is taken. Try another.`);
+      }
+
+      // 2- Create teh community in the DB
+      await setDoc(communityDocRef, {
+        creatorId: user?.uid,
+        createdAt: serverTimestamp(),
+        numberOfMembers: 1,
+        privacyType: communityType,
+      });
+    } catch (error: any) {
+      console.log('handleCreateCommunity:', error);
+      setError(error.message);
+    }
+
+    setLoading(false);
   };
 
   return (
@@ -89,6 +135,9 @@ const CreateCommunityModal: React.FC<CreateCommunityModalProps> = ({
               color={charsRemaining === 0 ? 'red' : 'gray.500'}
             >
               {charsRemaining} Characters remaining
+            </Text>
+            <Text fontSize="9pt" color="red" pt={1}>
+              {error}
             </Text>
             <Box mt={4} mb={4}>
               <Text fontWeight={600} fontSize={15}>
@@ -150,7 +199,11 @@ const CreateCommunityModal: React.FC<CreateCommunityModalProps> = ({
           <Button variant="outline" height="30px" mr={3} onClick={handleClose}>
             Cancel
           </Button>
-          <Button height="30px" onClick={() => {}}>
+          <Button
+            height="30px"
+            onClick={handleCreateCommunity}
+            isLoading={loading}
+          >
             Create
           </Button>
         </ModalFooter>
