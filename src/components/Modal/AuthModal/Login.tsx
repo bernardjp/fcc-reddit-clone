@@ -5,6 +5,7 @@ import { authModalState } from '@/atoms/authModalAtom';
 import { useSignInWithEmailAndPassword } from 'react-firebase-hooks/auth';
 import { auth } from '@/firebase/clientApp';
 import { FIREBASE_ERRORS } from '@/firebase/errors';
+import ModalInput from './ModalInput';
 
 type LoginProps = {};
 
@@ -16,7 +17,13 @@ const Login: React.FC<LoginProps> = () => {
   });
   const [signInWithEmailAndPassword, user, loading, userError] =
     useSignInWithEmailAndPassword(auth);
+  const [signInWithEmailAndPassword, user, loading, userError] =
+    useSignInWithEmailAndPassword(auth);
 
+  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    signInWithEmailAndPassword(loginForm.email, loginForm.password);
+  };
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     signInWithEmailAndPassword(loginForm.email, loginForm.password);
@@ -31,49 +38,17 @@ const Login: React.FC<LoginProps> = () => {
 
   return (
     <form onSubmit={onSubmit}>
-      <Input
-        required
-        name="email"
-        placeholder="email"
+      <ModalInput
         type="email"
+        inputName="email"
+        placeholder="email"
         onChange={onChange}
-        bg="gray.50"
-        fontSize="10pt"
-        mb={2}
-        _placeholder={{ color: 'gra.500' }}
-        _hover={{
-          bg: 'white',
-          border: '01px solid',
-          borderColor: 'blue.500',
-        }}
-        _focus={{
-          outline: 'none',
-          bg: 'white',
-          border: '01px solid',
-          borderColor: 'blue.500',
-        }}
       />
-      <Input
-        required
-        name="password"
-        placeholder="password"
+      <ModalInput
         type="password"
+        inputName="password"
+        placeholder="password"
         onChange={onChange}
-        bg="gray.50"
-        fontSize="10pt"
-        mb={2}
-        _placeholder={{ color: 'gra.500' }}
-        _hover={{
-          bg: 'white',
-          border: '01px solid',
-          borderColor: 'blue.500',
-        }}
-        _focus={{
-          outline: 'none',
-          bg: 'white',
-          border: '01px solid',
-          borderColor: 'blue.500',
-        }}
       />
       <Text textAlign="center" color="red" fontSize="10pt">
         {FIREBASE_ERRORS[userError?.message as keyof typeof FIREBASE_ERRORS]}
@@ -88,6 +63,24 @@ const Login: React.FC<LoginProps> = () => {
       >
         Log In
       </Button>
+      <Flex justifyContent="center" mb={2}>
+        <Text fontSize="9pt" mr={1}>
+          Forgot your password?
+        </Text>
+        <Text
+          fontSize="9pt"
+          color="blue.500"
+          cursor="pointer"
+          onClick={() =>
+            setAuthModalState((prev) => ({
+              ...prev,
+              view: 'resetPassword',
+            }))
+          }
+        >
+          Reset
+        </Text>
+      </Flex>
       <Flex fontSize="9pt" justifyContent="center">
         <Text mr={1}>New here?</Text>
         <Text
