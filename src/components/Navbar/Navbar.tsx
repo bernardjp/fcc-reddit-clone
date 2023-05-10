@@ -1,9 +1,10 @@
 import React from 'react';
-import { Flex, Image } from '@chakra-ui/react';
-import SearchInput from './SearchInput';
-import RightContent from './RightContent/RightContent';
-import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from '@/firebase/clientApp';
+import { Flex, Image } from '@chakra-ui/react';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import Directory from './Directory/Directory';
+import RightContent from './RightContent/RightContent';
+import SearchInput from './SearchInput';
 
 const Navbar: React.FC = () => {
   const [user, loading, error] = useAuthState(auth);
@@ -19,8 +20,8 @@ const Navbar: React.FC = () => {
           alt="Reddit"
         />
       </Flex>
-      <SearchInput />
-      {/* <Directory /> */}
+      <Directory />
+      <SearchInput user={user} />
       <RightContent user={user} />
     </Flex>
   );
