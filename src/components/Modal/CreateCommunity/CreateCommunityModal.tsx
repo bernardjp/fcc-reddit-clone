@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { auth, firestore } from '@/firebase/clientApp';
 import {
   Box,
   Button,
@@ -17,17 +18,10 @@ import {
   Stack,
   Text,
 } from '@chakra-ui/react';
+import { doc, runTransaction, serverTimestamp } from 'firebase/firestore';
+import { useAuthState } from 'react-firebase-hooks/auth';
 import { BsFillEyeFill, BsFillPersonFill } from 'react-icons/bs';
 import { HiLockClosed } from 'react-icons/hi';
-import {
-  doc,
-  getDoc,
-  runTransaction,
-  serverTimestamp,
-  setDoc,
-} from 'firebase/firestore';
-import { auth, firestore } from '@/firebase/clientApp';
-import { useAuthState } from 'react-firebase-hooks/auth';
 
 type CreateCommunityModalProps = {
   open: boolean;
