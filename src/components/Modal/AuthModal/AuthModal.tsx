@@ -30,7 +30,7 @@ const AuthModal: React.FC = () => {
 
   useEffect(() => {
     if (user) handleCloseModal();
-    console.log(user);
+    // console.log(user);
   }, [user, handleCloseModal]);
 
   return (
