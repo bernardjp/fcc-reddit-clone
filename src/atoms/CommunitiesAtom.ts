@@ -9,3 +9,24 @@ export interface Community {
   numberOfMembers: number;
   privacyType: 'public' | 'restricted' | 'private';
 }
+
+interface CommunitySnippet {
+  communitId: string;
+  isModerator?: boolean;
+  imageURL?: string;
+}
+
+interface CommunityState {
+  mySnippets: CommunitySnippet[];
+  // visitedCommunities
+}
+
+const defaultCommunityState: CommunityState = {
+  mySnippets: [],
+  // visitedCommunities
+};
+
+export const communityState = atom<CommunityState>({
+  key: 'communitiesState',
+  default: defaultCommunityState,
+});
