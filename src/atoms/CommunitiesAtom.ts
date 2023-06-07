@@ -10,8 +10,8 @@ export interface Community {
   privacyType: 'public' | 'restricted' | 'private';
 }
 
-interface CommunitySnippet {
-  communitId: string;
+export interface CommunitySnippet {
+  communityId: string;
   isModerator?: boolean;
   imageURL?: string;
 }
